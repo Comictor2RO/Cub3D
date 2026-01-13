@@ -3,7 +3,7 @@ NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra 
 
-SRCS = main.c
+SRCS = main.c collision.c draw_map.c draw_player.c hooks_handler.c utils.c map.c
 OBJS = $(SRCS:.c=.o)
 
 MLX_PATH = ./minilibx-linux
@@ -22,7 +22,6 @@ clean:
 	rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME)
 
 re: fclean all
 
