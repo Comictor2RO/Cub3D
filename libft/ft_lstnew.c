@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggabor <ggabor@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 16:25:05 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/14 16:25:27 by vturlas          ###   ########.fr       */
+/*   Created: 2025/01/12 16:27:36 by ggabor            #+#    #+#             */
+/*   Updated: 2025/01/12 19:22:59 by ggabor           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void    my_mlx_pixel_put(t_img *img, int x, int y, int color)
+t_list	*ft_lstnew(void *content)
 {
-    char    *dst;
+	t_list	*i;
 
-    dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
-    *(unsigned int *)dst = color;
+	i = ft_calloc(1, sizeof(t_list));
+	if (!i)
+		return (NULL);
+	i->content = content;
+	i->next = NULL;
+	return (i);
 }

@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int map[Map_Width][Map_Height] = {
+int map[MAP_WIDTH][MAP_HEIGHT] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, },

@@ -1,23 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_map.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/14 16:25:11 by vturlas           #+#    #+#             */
+/*   Updated: 2026/01/14 16:29:29 by vturlas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-static void draw_vertical_line(t_img *img, int x, int y, int len, int color)
+static void	draw_vertical_line(t_img *img, int x, int y, int len, int color)
 {
-    int i = 0;
-    while(i < len)
-    {
-        my_mlx_pixel_put(img, x, y + i, color);
-        i++;
-    }
+	int	i;
+
+	i = 0;
+	while(i < len)
+	{
+		my_mlx_pixel_put(img, x, y + i, color);
+		i++;
+	}
 }
 
-static void draw_horizontal_line(t_img *img, int x, int y, int len, int color)
+static void	draw_horizontal_line(t_img *img, int x, int y, int len, int color)
 {
-    int i = 0;
-    while(i < len)
-    {
-        my_mlx_pixel_put(img, x + i, y, color);
-        i++;
-    }
+	int i;
+
+	i = 0;
+	while(i < len)
+	{
+		my_mlx_pixel_put(img, x + i, y, color);
+		i++;
+	}
 }
 
 static void draw_tile(t_img *img, int x, int y, int color)
@@ -26,10 +42,10 @@ static void draw_tile(t_img *img, int x, int y, int color)
     int j;
 
     i = 0;
-    while(i < Tile)
+    while(i < TILE)
     {
         j = 0;
-        while(j < Tile)
+        while(j < TILE)
         {
             my_mlx_pixel_put(img, x + i, y + j, color);
             j++;
@@ -38,42 +54,49 @@ static void draw_tile(t_img *img, int x, int y, int color)
     }
 }
 
-void draw_map(void *mlx, void *window)
+void draw_map(t_game *game)
 {
     int x;
     int y;
-    t_img img;
 
-    img.img = mlx_new_image(mlx, Map_Width * Tile, Map_Height * Tile);
-    img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-
+    // Curăță buffer-ul
     x = 0;
-    while(x < Map_Width)
+    while(x < MAP_WIDTH * TILE)
     {
         y = 0;
-        while(y < Map_Height)
+        while(y < MAP_HEIGHT * TILE)
+        {
+            my_mlx_pixel_put(&game->map_img, x, y, 0x00333333);
+            y++;
+        }
+        x++;
+    }
+
+    // Desenează tile-urile
+    x = 0;
+    while(x < MAP_WIDTH)
+    {
+        y = 0;
+        while(y < MAP_HEIGHT)
         {
             if(map[y][x] == 1)
-                draw_tile(&img, x * Tile, y * Tile, 0x00FFFFFF);
-            else
-                draw_tile(&img, x * Tile, y * Tile, 0x00333333);
+                draw_tile(&game->map_img, x * TILE, y * TILE, 0x00FFFFFF);
             y++;
         }
         x++;
     }
 
+    // Desenează grid-ul
     x = 0;
-    while (x < Map_Width)
+    while (x < MAP_WIDTH)
     {
         y = 0;
-        while (y < Map_Height)
+        while (y < MAP_HEIGHT)
         {
-            draw_vertical_line(&img, (x + 1) * Tile - 1, y * Tile, Tile, 0xFF000000);
-            draw_horizontal_line(&img, x * Tile, (y + 1) * Tile - 1, Tile, 0xFF000000);
+            draw_vertical_line(&game->map_img, (x + 1) * TILE - 1, y * TILE, TILE, 0xFF000000);
+            draw_horizontal_line(&game->map_img, x * TILE, (y + 1) * TILE - 1, TILE, 0xFF000000);
             y++;
         }
         x++;
     }
-
-    mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 }

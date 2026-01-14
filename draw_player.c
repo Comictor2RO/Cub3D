@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_player.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/14 16:25:13 by vturlas           #+#    #+#             */
+/*   Updated: 2026/01/14 16:25:14 by vturlas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-void draw_circle(void *mlx, void *window, int cx, int cy, int r, int color)
+void draw_circle(t_img *img, int cx, int cy, int r, int color)
 {
     int x;
     int y;
@@ -13,18 +25,17 @@ void draw_circle(void *mlx, void *window, int cx, int cy, int r, int color)
         x = cx - r;
         while(x <= cx + r)
         {
-
             dx = x - cx;
             dy = y - cy;
             if(dx * dx + dy * dy <= r * r)
-                mlx_pixel_put(mlx, window, x, y, color);
+                my_mlx_pixel_put(img, x, y, color);
             x++;
         }
         y++;
     }
 }
 
-void draw_line(void *mlx, void *window, int x1, int y1, int x2, int y2, int color)
+void draw_line(t_img *img, int x1, int y1, int x2, int y2, int color)
 {
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
@@ -35,7 +46,7 @@ void draw_line(void *mlx, void *window, int x1, int y1, int x2, int y2, int colo
 
     while (1)
     {
-        mlx_pixel_put(mlx, window, x1, y1, color);
+        my_mlx_pixel_put(img, x1, y1, color);
         if (x1 == x2 && y1 == y2)
             break;
         e2 = 2 * err;
@@ -50,4 +61,18 @@ void draw_line(void *mlx, void *window, int x1, int y1, int x2, int y2, int colo
             y1 += sy;
         }
     }
+}
+
+void draw_player_2d(t_game *game)
+{
+    int end_x;
+    int end_y;
+    
+    // Desenează cercul jucătorului (roșu)
+    draw_circle(&game->map_img, (int)game->player.x, (int)game->player.y, 4, 0x00FF0000);
+    
+    // Desenează linia de direcție (galben)
+    end_x = (int)(game->player.x + cos(game->player.angle) * 15);
+    end_y = (int)(game->player.y + sin(game->player.angle) * 15);
+    draw_line(&game->map_img, (int)game->player.x, (int)game->player.y, end_x, end_y, 0x00FFFF00);
 }
