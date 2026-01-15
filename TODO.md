@@ -39,11 +39,6 @@ Fișiere: parse_file.c, validate_map.c
 #### 2. Texturi pe Pereți (OBLIGATORIU)
 Încarcă .xpm și desenează pe pereți.
 
-### PRIORITATE MEDIE:
-
-#### 4. Mișcare Strafing
-Q/E pentru lateral
-
 ### PRIORITATE SCĂZUTĂ:
 
 #### 5. Shading
@@ -54,7 +49,7 @@ Q/E pentru lateral
 
 ### BONUS:
 
-Mouse look, porți, animații, skybox, sunet
+Porți, animații, skybox, sunet
 
 ---
 

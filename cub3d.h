@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/15 15:36:15 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/15 16:41:56 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_game
 	t_player	player;
 	t_img		map_img;
 	int			keys[4];
+	int			mouse_x;
+	int			mouse_y;
 }	t_game;
 
 void	draw_map(t_game *game);
@@ -86,6 +88,7 @@ void	draw_line(t_img	*img, int x1, int y1, int x2, int y2, int color);
 void	draw_player_2d(t_game *game);
 int		handle_key(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
+int		handle_mouse_move(int x, int y, t_game *game);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_3d_view(t_game *game);
 

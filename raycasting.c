@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:23 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/15 15:47:24 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/15 16:48:30 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ static void	init_ray(t_ray *ray, t_game *game, int x)
 	ray->dir_y = game->player.dir_y + game->player.plane_y * ray->camera_x;
 	ray->map_x = (int)(game->player.x / TILE);
 	ray->map_y = (int)(game->player.y / TILE);
-	ray->delta_dist_x = fabs(1 / ray->dir_x);
-	ray->delta_dist_y = fabs(1 / ray->dir_y);
+	if (fabs(ray->dir_x) < 1e-10)
+		ray->delta_dist_x = 1e30;
+	else
+		ray->delta_dist_x = fabs(1 / ray->dir_x);
+	if (fabs(ray->dir_y) < 1e-10)
+		ray->delta_dist_y = 1e30;
+	else
+		ray->delta_dist_y = fabs(1 / ray->dir_y);
 	ray->hit = 0;
 }
 

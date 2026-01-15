@@ -6,19 +6,11 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:19 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/15 15:34:36 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/15 16:48:31 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static void	update_player_vectors(t_game *game)
-{
-	game->player.dir_x = cos(game->player.angle);
-	game->player.dir_y = sin(game->player.angle);
-	game->player.plane_x = -sin(game->player.angle) * 0.66;
-	game->player.plane_y = cos(game->player.angle) * 0.66;
-}
 
 int	update_game(t_game *game)
 {
@@ -49,13 +41,23 @@ int	update_game(t_game *game)
 	}
 	if (game->keys[2])
 	{
-		game->player.angle -= ROT_SPEED;
-		update_player_vectors(game);
+		new_x = game->player.x - game->player.plane_x * MOVE_SPEED;
+		new_y = game->player.y - game->player.plane_y * MOVE_SPEED;
+		if (!check_collision(new_x, new_y))
+		{
+			game->player.x = new_x;
+			game->player.y = new_y;
+		}
 	}
 	if (game->keys[3])
 	{
-		game->player.angle += ROT_SPEED;
-		update_player_vectors(game);
+		new_x = game->player.x + game->player.plane_x * MOVE_SPEED;
+		new_y = game->player.y + game->player.plane_y * MOVE_SPEED;
+		if (!check_collision(new_x, new_y))
+		{
+			game->player.x = new_x;
+			game->player.y = new_y;
+		}
 	}
 	y = 0;
 	while (y < WINDOW_HEIGHT)
@@ -95,8 +97,13 @@ int	main(void)
 	game.keys[1] = 0;
 	game.keys[2] = 0;
 	game.keys[3] = 0;
+	game.mouse_x = WINDOW_WIDTH / 2;
+	game.mouse_y = WINDOW_HEIGHT / 2;
+	mlx_mouse_hide(game.mlx, game.window);
+	mlx_mouse_move(game.mlx, game.window, game.mouse_x, game.mouse_y);
 	mlx_hook(game.window, 2, 1L << 0, handle_key, &game);
 	mlx_hook(game.window, 3, 1L << 1, handle_key_release, &game);
+	mlx_hook(game.window, 6, 1L << 6, handle_mouse_move, &game);
 	mlx_loop_hook(game.mlx, update_game, &game);
 	mlx_loop(game.mlx);
 	return (0);
