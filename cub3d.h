@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/14 16:37:57 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/15 15:36:15 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,24 @@
 
 extern int	map[MAP_WIDTH][MAP_HEIGHT];
 
+typedef struct s_ray
+{
+    double camera_x;
+    double dir_x;
+    double dir_y;
+    int map_x;
+    int map_y;
+    double side_dist_x;
+    double side_dist_y;
+    double delta_dist_x;
+    double delta_dist_y;
+    int step_x;
+    int step_y;
+    int hit;
+    int side;
+    double perp_wall_dist;
+}	t_ray;
+
 typedef struct s_img
 {
 	void	*img;
@@ -46,6 +64,10 @@ typedef struct s_player
 	double	x;
 	double	y;
 	double	angle;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
 }	t_player;
 
 typedef struct s_game
@@ -66,4 +88,4 @@ int		handle_key(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_3d_view(t_game *game);
-double	cast_single_ray(t_game *game, double ray_angle);
+

@@ -41,9 +41,6 @@ Fișiere: parse_file.c, validate_map.c
 
 ### PRIORITATE MEDIE:
 
-#### 3. Optimizare DDA
-~30x mai rapid, mai precis
-
 #### 4. Mișcare Strafing
 Q/E pentru lateral
 

@@ -6,11 +6,19 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:19 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/14 16:31:56 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/15 15:34:36 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	update_player_vectors(t_game *game)
+{
+	game->player.dir_x = cos(game->player.angle);
+	game->player.dir_y = sin(game->player.angle);
+	game->player.plane_x = -sin(game->player.angle) * 0.66;
+	game->player.plane_y = cos(game->player.angle) * 0.66;
+}
 
 int	update_game(t_game *game)
 {
@@ -21,8 +29,8 @@ int	update_game(t_game *game)
 
 	if (game->keys[0])
 	{
-		new_x = game->player.x + cos(game->player.angle) * MOVE_SPEED;
-		new_y = game->player.y + sin(game->player.angle) * MOVE_SPEED;
+		new_x = game->player.x + game->player.dir_x * MOVE_SPEED;
+		new_y = game->player.y + game->player.dir_y * MOVE_SPEED;
 		if (!check_collision(new_x, new_y))
 		{
 			game->player.x = new_x;
@@ -31,8 +39,8 @@ int	update_game(t_game *game)
 	}
 	if (game->keys[1])
 	{
-		new_x = game->player.x - cos(game->player.angle) * MOVE_SPEED;
-		new_y = game->player.y - sin(game->player.angle) * MOVE_SPEED;
+		new_x = game->player.x - game->player.dir_x * MOVE_SPEED;
+		new_y = game->player.y - game->player.dir_y * MOVE_SPEED;
 		if (!check_collision(new_x, new_y))
 		{
 			game->player.x = new_x;
@@ -42,10 +50,12 @@ int	update_game(t_game *game)
 	if (game->keys[2])
 	{
 		game->player.angle -= ROT_SPEED;
+		update_player_vectors(game);
 	}
 	if (game->keys[3])
 	{
 		game->player.angle += ROT_SPEED;
+		update_player_vectors(game);
 	}
 	y = 0;
 	while (y < WINDOW_HEIGHT)
@@ -77,6 +87,10 @@ int	main(void)
 	game.player.x = 5 * TILE + TILE / 2;
 	game.player.y = 5 * TILE + TILE / 2;
 	game.player.angle = 0.0;
+	game.player.dir_x = 1.0;
+	game.player.dir_y = 0.0;
+	game.player.plane_x = 0.0;
+	game.player.plane_y = 0.66;
 	game.keys[0] = 0;
 	game.keys[1] = 0;
 	game.keys[2] = 0;
