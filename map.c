@@ -1,6 +1,7 @@
 #include "cub3d.h"
 
-int map[MAP_WIDTH][MAP_HEIGHT] = {
+// Old hardcoded map - no longer used, kept for reference
+int map[10][10] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, },
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, },

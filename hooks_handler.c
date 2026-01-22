@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:16 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/15 16:48:30 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/22 17:14:59 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ int	handle_mouse_move(int x, int y, t_game *game)
 int	handle_key(int keycode, t_game *game)
 {
 	if (keycode == 65307)
-	{
-		mlx_destroy_window(game->mlx, game->window);
-		exit(0);
-	}
+		close_game(game);
 	if (keycode == 119 || keycode == 'w')
 		game->keys[0] = 1;
 	if (keycode == 115 || keycode == 's')
@@ -73,5 +70,12 @@ int	handle_key_release(int keycode, t_game *game)
 		game->keys[2] = 0;
 	if (keycode == 100 || keycode == 'd')
 		game->keys[3] = 0;
+	return (0);
+}
+
+int	close_game(t_game *game)
+{
+	cleanup_game(game);
+	exit(0);
 	return (0);
 }

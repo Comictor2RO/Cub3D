@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:11 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/14 16:29:29 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/22 16:51:37 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,16 @@ void	draw_map(t_game *game)
 {
 	int	x;
 	int	y;
+	int	max_x;
+	int	max_y;
 
+	max_x = game->cub->map.width * TILE;
+	max_y = game->cub->map.height * TILE;
 	x = 0;
-	while (x < MAP_WIDTH * TILE)
+	while (x < max_x && x < MINIMAP_WIDTH)
 	{
 		y = 0;
-		while (y < MAP_HEIGHT * TILE)
+		while (y < max_y && y < WINDOW_HEIGHT)
 		{
 			my_mlx_pixel_put(&game->map_img, x, y, 0x00333333);
 			y++;
@@ -71,22 +75,22 @@ void	draw_map(t_game *game)
 		x++;
 	}
 	x = 0;
-	while (x < MAP_WIDTH)
+	while (x < game->cub->map.width)
 	{
 		y = 0;
-		while (y < MAP_HEIGHT)
+		while (y < game->cub->map.height)
 		{
-			if (map[y][x] == 1)
+			if (game->cub->map.grid[y][x] == '1')
 				draw_tile(&game->map_img, x * TILE, y * TILE, 0x00FFFFFF);
 			y++;
 		}
 		x++;
 	}
 	x = 0;
-	while (x < MAP_WIDTH)
+	while (x < game->cub->map.width)
 	{
 		y = 0;
-		while (y < MAP_HEIGHT)
+		while (y < game->cub->map.height)
 		{
 			draw_vertical_line(&game->map_img, (x + 1) * TILE - 1, y * TILE, TILE, 0xFF000000);
 			draw_horizontal_line(&game->map_img, x * TILE, (y + 1) * TILE - 1, TILE, 0xFF000000);
