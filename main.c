@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:19 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:14:56 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/01/26 17:11:32 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int	update_game(t_game *game)
 		}
 		y++;
 	}
-	// draw_map(game);
 	draw_3d_view(game);
-	// draw_player_2d(game);
+	draw_map(game);
+	draw_player_2d(game);
 	mlx_put_image_to_window(game->mlx, game->window, game->map_img.img, 0, 0);
 	return (0);
 }

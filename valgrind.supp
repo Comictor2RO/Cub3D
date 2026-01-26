@@ -1,0 +1,98 @@
+# Valgrind suppression file for Cub3D
+# Suppresses "still reachable" memory from X11, MiniLibX, and system libraries
+# These are not real memory leaks - they are cached resources that would be
+# freed automatically by the OS when the program terminates.
+
+# X11 library internal allocations
+{
+   X11_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libX11.so*
+}
+
+# Xcursor library internal allocations
+{
+   Xcursor_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libXcursor.so*
+}
+
+# Dynamic loader (dlopen) allocations
+{
+   dlopen_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*dlopen*
+}
+
+{
+   dl_open_worker_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:dl_open_worker*
+}
+
+{
+   dl_new_object_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_new_object
+}
+
+{
+   dl_map_object_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_map_object*
+}
+
+# X11 locale and charset internal allocations
+{
+   X11_locale_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_Xlc*
+}
+
+{
+   X11_xrm_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*Xrm*
+}
+
+# X11 resource database
+{
+   X11_resource_db_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XrmGetStringDatabase
+}
+
+{
+   X11_get_default_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XGetDefault
+}
+
+# MiniLibX allocations
+{
+   mlx_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_*
+}
