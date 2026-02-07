@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:15:02 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:05:52 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,17 @@ void	draw_line(t_img	*img, int x1, int y1, int x2, int y2, int color);
 void	draw_player_2d(t_game *game);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_3d_view(t_game *game);
+void	draw_rays_on_minimap(t_game *game);
 
 /* Input handlers */
 int		handle_key(int keycode, t_game *game);
 int		handle_key_release(int keycode, t_game *game);
 int		handle_mouse_move(int x, int y, t_game *game);
 int		close_game(t_game *game);
+
+/* Movements */
+void	movements_up_down(t_game *game, double new_x, double new_y);
+void	movements_left_right(t_game *game, double new_x, double new_y);
 
 /* Parsing functions */
 t_cub	*parse_cub_file(char *filename);

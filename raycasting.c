@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:23 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:07:33 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:05:49 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,27 +88,33 @@ static void	perform_dda(t_ray *ray, t_game *game)
 				+ (1 - ray->step_y) / 2) / ray->dir_y;
 }
 
-// static void	draw_ray_on_minimap(t_game *game, t_ray *ray)
-// {
-// 	double	ray_end_x;
-// 	double	ray_end_y;
-// 	int		start_x;
-// 	int		start_y;
-// 	int		end_x;
-// 	int		end_y;
+static void	draw_ray_on_minimap(t_game *game, t_ray *ray)
+{
+	double	ray_end_x;
+	double	ray_end_y;
+	double	scale;
+	int		start_x;
+	int		start_y;
+	int		end_x;
+	int		end_y;
 
-// 	ray_end_x = game->player.x + ray->dir_x * ray->perp_wall_dist * TILE;
-// 	ray_end_y = game->player.y + ray->dir_y * ray->perp_wall_dist * TILE;
-// 	start_x = (int)(game->player.x);
-// 	start_y = (int)(game->player.y);
-// 	end_x = (int)(ray_end_x);
-// 	end_y = (int)(ray_end_y);
-// 	if (start_x >= 0 && start_x < MINIMAP_WIDTH
-// 		&& start_y >= 0 && start_y < WINDOW_HEIGHT
-// 		&& end_x >= 0 && end_x < MINIMAP_WIDTH
-// 		&& end_y >= 0 && end_y < WINDOW_HEIGHT)
-// 		draw_line(&game->map_img, start_x, start_y, end_x, end_y, 0xFFFF00);
-// }
+	scale = (double)MINIMAP_WIDTH / (game->cub->map.width * TILE);
+	if ((game->cub->map.height * TILE * scale) > WINDOW_HEIGHT)
+		scale = (double)WINDOW_HEIGHT / (game->cub->map.height * TILE);
+	ray_end_x = game->player.x + ray->dir_x * ray->perp_wall_dist * TILE;
+	ray_end_y = game->player.y + ray->dir_y * ray->perp_wall_dist * TILE;
+	start_x = (int)(game->player.x * scale);
+	start_y = (int)(game->player.y * scale);
+	end_x = (int)(ray_end_x * scale);
+	end_y = (int)(ray_end_y * scale);
+	if (start_x >= 0 && start_x < MINIMAP_WIDTH
+		&& start_y >= 0 && start_y < WINDOW_HEIGHT
+		&& end_x >= 0 && end_x < MINIMAP_WIDTH
+		&& end_y >= 0 && end_y < WINDOW_HEIGHT)
+	{
+		draw_line(&game->map_img, start_x, start_y, end_x, end_y, 0xFFFF00);
+	}
+}
 
 static t_texture	*select_texture(t_game *game, t_ray *ray)
 {
@@ -198,8 +204,25 @@ void	draw_3d_view(t_game *game)
 		calculate_step_and_side_dist(&ray, game);
 		perform_dda(&ray, game);
 		draw_wall_stripe(game, &ray, x);
-		// if (x % 20 == 0)
-		// 	draw_ray_on_minimap(game, &ray);
+		x++;
+	}
+}
+
+void	draw_rays_on_minimap(t_game *game)
+{
+	t_ray	ray;
+	int		x;
+
+	x = 0;
+	while (x < NUM_RAYS)
+	{
+		if (x % 20 == 0)
+		{
+			init_ray(&ray, game, x);
+			calculate_step_and_side_dist(&ray, game);
+			perform_dda(&ray, game);
+			draw_ray_on_minimap(game, &ray);
+		}
 		x++;
 	}
 }

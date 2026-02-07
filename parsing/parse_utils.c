@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:07:12 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:07:14 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:27:50 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,29 +94,4 @@ int	ends_with(char *str, char *suffix)
 int	rgb_to_hex(int r, int g, int b)
 {
 	return ((r << 16) | (g << 8) | b);
-}
-
-int	is_map_line(char *line)
-{
-	int	i;
-	int	has_content;
-
-	if (!line)
-		return (0);
-	i = 0;
-	has_content = 0;
-	while (line[i])
-	{
-		if (line[i] != '0' && line[i] != '1' && 
-			line[i] != 'N' && line[i] != 'S' && 
-			line[i] != 'E' && line[i] != 'W' && 
-			line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
-			return (0);
-		if (line[i] == '0' || line[i] == '1' || 
-			line[i] == 'N' || line[i] == 'S' || 
-			line[i] == 'E' || line[i] == 'W')
-			has_content = 1;
-		i++;
-	}
-	return (has_content);
 }

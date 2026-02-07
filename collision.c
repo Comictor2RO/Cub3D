@@ -19,8 +19,8 @@ int	check_collision(t_game *game, double x, double y)
 
 	map_x = (int)(x / TILE);
 	map_y = (int)(y / TILE);
-	if (map_x < 0 || map_x >= game->cub->map.width || 
-		map_y < 0 || map_y >= game->cub->map.height)
+	if (map_x < 0 || map_x >= game->cub->map.width
+		|| map_y < 0 || map_y >= game->cub->map.height)
 		return (1);
 	if (game->cub->map.grid[map_y][map_x] == '1')
 		return (1);

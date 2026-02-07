@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:13 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/26 17:11:32 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 17:58:25 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,14 @@ void	draw_player_2d(t_game *game)
 	int		player_x;
 	int		player_y;
 
-	// Calculăm același factor de scalare ca în draw_map
 	scale = (double)MINIMAP_WIDTH / (game->cub->map.width * TILE);
 	if ((game->cub->map.height * TILE * scale) > WINDOW_HEIGHT)
 		scale = (double)WINDOW_HEIGHT / (game->cub->map.height * TILE);
-	
-	// Convertim poziția jucătorului în coordonate scalate
-	// game->player.x și game->player.y sunt în pixeli
 	player_x = (int)(game->player.x * scale);
 	player_y = (int)(game->player.y * scale);
-	
-	// Verificăm dacă jucătorul este în zona minimap-ului
 	if (player_x >= 0 && player_x < MINIMAP_WIDTH && 
 		player_y >= 0 && player_y < WINDOW_HEIGHT)
 	{
-		// Desenăm jucătorul și direcția
 		draw_circle(&game->map_img, player_x, player_y, 4, 0x00FF0000);
 		end_x = (int)(player_x + cos(game->player.angle) * 15);
 		end_y = (int)(player_y + sin(game->player.angle) * 15);

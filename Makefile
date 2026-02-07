@@ -5,7 +5,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c collision.c draw_map.c draw_player.c hooks_handler.c utils.c map.c raycasting.c cleanup.c \
        parsing/parse_file.c parsing/parse_textures.c parsing/parse_colors.c \
-       parsing/parse_map.c parsing/validate_map.c parsing/parse_utils.c parsing/parse_error.c
+       parsing/parse_map.c parsing/validate_map.c parsing/parse_utils.c parsing/parse_error.c \
+	   movements.c
 OBJS = $(SRCS:.c=.o)
 
 MLX_PATH = ./minilibx-linux

@@ -6,25 +6,14 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:07:04 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:07:05 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:25:42 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static int	parse_texture_line(char *line, char *id, t_texture *tex)
+static void	validate_texture_path(char *trimmed)
 {
-	char	*path;
-	char	*trimmed;
-
-	if (!starts_with(line, id))
-		return (0);
-	if (tex->path != NULL)
-		return (error_msg("Error: Duplicate texture identifier"));
-	path = line + ft_strlen(id);
-	while (*path == ' ' || *path == '\t')
-		path++;
-	trimmed = ft_strtrim_whitespace(path);
 	if (!trimmed || ft_strlen(trimmed) == 0)
 	{
 		free(trimmed);
@@ -40,6 +29,22 @@ static int	parse_texture_line(char *line, char *id, t_texture *tex)
 		free(trimmed);
 		return (error_msg("Error: Texture file not found"));
 	}
+}
+
+static int	parse_texture_line(char *line, char *id, t_texture *tex)
+{
+	char	*path;
+	char	*trimmed;
+
+	if (!starts_with(line, id))
+		return (0);
+	if (tex->path != NULL)
+		return (error_msg("Error: Duplicate texture identifier"));
+	path = line + ft_strlen(id);
+	while (*path == ' ' || *path == '\t')
+		path++;
+	trimmed = ft_strtrim_whitespace(path);
+	validate_texture_path(trimmed);
 	tex->path = trimmed;
 	return (1);
 }
@@ -67,11 +72,11 @@ static int	load_texture(t_game *game, t_texture *tex)
 {
 	if (!tex->path)
 		return (error_msg("Error: Texture path is NULL"));
-	tex->img = mlx_xpm_file_to_image(game->mlx, tex->path, 
+	tex->img = mlx_xpm_file_to_image(game->mlx, tex->path,
 			&tex->width, &tex->height);
 	if (!tex->img)
 		return (error_msg("Error: Failed to load texture"));
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, 
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
 			&tex->line_len, &tex->endian);
 	if (!tex->addr)
 		return (error_msg("Error: Failed to get texture data"));

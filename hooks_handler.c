@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:16 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:14:59 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:16:06 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	handle_mouse_move(int x, int y, t_game *game)
 	if (x < 100 || x > WINDOW_WIDTH - 100)
 	{
 		game->mouse_x = WINDOW_WIDTH / 2;
-		mlx_mouse_move(game->mlx, game->window, game->mouse_x, WINDOW_HEIGHT / 2);
+		mlx_mouse_move(game->mlx, game->window,
+			game->mouse_x, WINDOW_HEIGHT / 2);
 	}
 	else
 		game->mouse_x = x;
