@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:05:52 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 16:12:01 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void	draw_player_2d(t_game *game);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_3d_view(t_game *game);
 void	draw_rays_on_minimap(t_game *game);
+void	fill_tile(t_game *game, int x, int y, double s);
 
 /* Input handlers */
 int		handle_key(int keycode, t_game *game);
@@ -153,6 +154,7 @@ int		find_player(t_map *map);
 int		validate_map(t_map *map);
 int		load_all_textures(t_game *game);
 void	init_player_from_map(t_game *game);
+int		is_map_line(char *line);
 
 /* Parsing utils */
 char	*ft_strtrim_whitespace(char *str);

@@ -6,11 +6,11 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/07 18:27:26 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:29:09 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 15:53:41 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 int	is_map_line(char *line)
 {

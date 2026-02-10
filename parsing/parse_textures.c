@@ -6,13 +6,13 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:07:04 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:25:42 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 15:49:11 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	validate_texture_path(char *trimmed)
+static int	validate_texture_path(char *trimmed)
 {
 	if (!trimmed || ft_strlen(trimmed) == 0)
 	{
@@ -29,6 +29,7 @@ static void	validate_texture_path(char *trimmed)
 		free(trimmed);
 		return (error_msg("Error: Texture file not found"));
 	}
+	return (1);
 }
 
 static int	parse_texture_line(char *line, char *id, t_texture *tex)
@@ -44,7 +45,8 @@ static int	parse_texture_line(char *line, char *id, t_texture *tex)
 	while (*path == ' ' || *path == '\t')
 		path++;
 	trimmed = ft_strtrim_whitespace(path);
-	validate_texture_path(trimmed);
+	if (!validate_texture_path(trimmed))
+		return (0);
 	tex->path = trimmed;
 	return (1);
 }

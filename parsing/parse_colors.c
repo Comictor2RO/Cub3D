@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:06:24 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 17:06:26 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 16:26:38 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	parse_rgb(char *str, t_color *color)
 		free_split(split);
 		return (error_msg("Error: Invalid RGB format (need R,G,B)"));
 	}
-	if (!parse_rgb_component(split[0], &r) ||
-		!parse_rgb_component(split[1], &g) ||
-		!parse_rgb_component(split[2], &b))
+	if (!parse_rgb_component(split[0], &r)
+		|| !parse_rgb_component(split[1], &g)
+		|| !parse_rgb_component(split[2], &b))
 	{
 		free_split(split);
 		return (error_msg("Error: RGB values must be 0-255"));
@@ -68,14 +68,8 @@ int	parse_rgb(char *str, t_color *color)
 	return (1);
 }
 
-int	parse_color_line(t_cub *cub, char *line)
+static int	controls(t_cub *cub, char *trimmed, char *rgb_str, int result)
 {
-	char	*trimmed;
-	char	*rgb_str;
-	int		result;
-
-	trimmed = ft_strtrim_whitespace(line);
-	result = 0;
 	if (starts_with(trimmed, "F "))
 	{
 		if (cub->floor.r != -1)
@@ -94,6 +88,19 @@ int	parse_color_line(t_cub *cub, char *line)
 			rgb_str++;
 		result = parse_rgb(rgb_str, &cub->ceiling);
 	}
+	return (result);
+}
+
+int	parse_color_line(t_cub *cub, char *line)
+{
+	char	*trimmed;
+	char	*rgb_str;
+	int		result;
+
+	trimmed = ft_strtrim_whitespace(line);
+	rgb_str = NULL;
+	result = 0;
+	result = controls(cub, trimmed, rgb_str, result);
 	free(trimmed);
 	return (result);
 }
