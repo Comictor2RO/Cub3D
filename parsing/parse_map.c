@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 17:06:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/26 16:42:50 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 17:09:46 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,24 @@
 int	add_map_line(t_map *map, char *line)
 {
 	char	**new_grid;
-	int		i;
-	int		len;
 
-	new_grid = malloc(sizeof(char *) * (map->height + 2));
+	new_grid = allocate_new_grid(map);
 	if (!new_grid)
 		return (0);
-	i = 0;
-	while (i < map->height)
-	{
-		new_grid[i] = map->grid[i];
-		i++;
-	}
-	new_grid[i] = ft_strdup(line);
-	if (!new_grid[i])
+	if (!process_new_line(new_grid, map->height, line))
 		return (0);
-	len = ft_strlen(new_grid[i]);
-	if (len > 0 && new_grid[i][len - 1] == '\n')
-		new_grid[i][len - 1] = '\0';
-	new_grid[i + 1] = NULL;
 	if (map->grid)
 		free(map->grid);
 	map->grid = new_grid;
+	if ((int)ft_strlen(new_grid[map->height]) > map->width)
+		map->width = ft_strlen(new_grid[map->height]);
 	map->height++;
-	if ((int)ft_strlen(new_grid[i]) > map->width)
-		map->width = ft_strlen(new_grid[i]);
 	return (1);
 }
 
 void	normalize_map(t_map *map)
 {
 	int		i;
-	int		j;
 	int		len;
 	char	*new_line;
 
@@ -56,18 +42,9 @@ void	normalize_map(t_map *map)
 		len = ft_strlen(map->grid[i]);
 		if (len < map->width)
 		{
-			new_line = malloc(map->width + 1);
+			new_line = create_padded_line(map->grid[i], map->width);
 			if (!new_line)
 				return ;
-			j = 0;
-			while (j < len)
-			{
-				new_line[j] = map->grid[i][j];
-				j++;
-			}
-			while (j < map->width)
-				new_line[j++] = ' ';
-			new_line[j] = '\0';
 			free(map->grid[i]);
 			map->grid[i] = new_line;
 		}
@@ -88,14 +65,7 @@ int	find_player(t_map *map)
 		x = 0;
 		while (map->grid[y][x])
 		{
-			if (map->grid[y][x] == 'N' || map->grid[y][x] == 'S' ||
-				map->grid[y][x] == 'E' || map->grid[y][x] == 'W')
-			{
-				map->player_x = x;
-				map->player_y = y;
-				map->player_dir = map->grid[y][x];
-				count++;
-			}
+			save_player(map, x, y, &count);
 			x++;
 		}
 		y++;

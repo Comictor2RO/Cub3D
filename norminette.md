@@ -4,4 +4,4 @@ utils.c, parse_error.c, parse_textures.c, parse_utils.c, parse_utils2.c, validat
 
 DE FACUT:
 cub3d.h, draw_player.c, raycasting.c,
-parse_file.c, parse_map.c,
+parse_file.c

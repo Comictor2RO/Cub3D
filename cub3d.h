@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/10 16:12:01 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/10 17:10:13 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,10 @@ int		starts_with(char *str, char *prefix);
 int		ends_with(char *str, char *suffix);
 int		rgb_to_hex(int r, int g, int b);
 int		is_map_line(char *line);
+char	**allocate_new_grid(t_map *map);
+int		process_new_line(char **new_grid, int i, char *line);
+char	*create_padded_line(char *old_line, int width);
+void    save_player(t_map *map, int x, int y, int *count);
 
 /* Error handling */
 int		error_msg(char *msg);
