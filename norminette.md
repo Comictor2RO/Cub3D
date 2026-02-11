@@ -1,2 +1,2 @@
 DE FACUT:
-cub3d.h, raycasting.c,
+cub3d.h,
