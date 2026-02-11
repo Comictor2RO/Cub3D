@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 15:40:55 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/11 15:41:21 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 15:45:35 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,19 @@ int	check_all_elements(t_cub *cub)
 	return (1);
 }
 
+static char	*append_buffer(char *line, char *buffer)
+{
+	char	*temp;
+
+	temp = ft_strjoin(line, buffer);
+	free(line);
+	return (temp);
+}
+
 char	*read_line(int fd)
 {
 	char	*line;
 	char	buffer[2];
-	char	*temp;
 	int		ret;
 
 	line = ft_strdup("");
@@ -65,14 +73,8 @@ char	*read_line(int fd)
 			break ;
 		buffer[1] = '\0';
 		if (buffer[0] == '\n')
-		{
-			temp = ft_strjoin(line, buffer);
-			free(line);
-			return (temp);
-		}
-		temp = ft_strjoin(line, buffer);
-		free(line);
-		line = temp;
+			return (append_buffer(line, buffer));
+		line = append_buffer(line, buffer);
 	}
 	if (ret < 0 || (ret == 0 && ft_strlen(line) == 0))
 	{
