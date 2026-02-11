@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/11 15:41:59 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 16:02:58 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,17 @@ typedef struct s_bresenham
 	int	err;
 }	t_bresenham;
 
+typedef struct s_wall_draw
+{
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			tex_x;
+	double		step;
+	double		tex_pos;
+	t_texture	*tex;
+}	t_wall_draw;
+
 /* Drawing functions */
 void	draw_map(t_game *game);
 int		check_collision(t_game *game, double x, double y);
@@ -161,6 +172,11 @@ void	fill_tile(t_game *game, int x, int y, double s);
 void	init_bresenham(t_bresenham *b, t_line p);
 void	update_line_pos(t_line *p, t_bresenham *b);
 void	draw_circle_line(t_img *img, t_circle p, int y);
+int	get_texture_color(t_texture *tex, int tex_x, int tex_y);
+t_texture	*select_texture(t_game *game, t_ray *ray);
+void	perform_dda(t_ray *ray, t_game *game);
+void	calculate_step_and_side_dist(t_ray *ray, t_game *game);
+void	init_ray(t_ray *ray, t_game *game, int x);
 
 /* Input handlers */
 int		handle_key(int keycode, t_game *game);

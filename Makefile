@@ -7,7 +7,7 @@ SRCS = main.c collision.c draw_map.c draw_player.c hooks_handler.c utils.c map.c
        parsing/parse_file.c parsing/parse_textures.c parsing/parse_colors.c \
        parsing/parse_map.c parsing/validate_map.c parsing/parse_utils.c parsing/parse_error.c \
 	   movements.c parsing/parse_utils2.c draw_map2.c parsing/parse_map_utils.c draw_player_utils.c \
-	   parsing/parse_file_utils.c
+	   parsing/parse_file_utils.c raycasting_utils.c
 OBJS = $(SRCS:.c=.o)
 
 MLX_PATH = ./minilibx-linux

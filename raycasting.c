@@ -6,92 +6,14 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:23 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/11 15:32:52 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 16:06:03 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	init_ray(t_ray *ray, t_game *game, int x)
-{
-	ray->camera_x = 2 * x / (double)NUM_RAYS - 1;
-	ray->dir_x = game->player.dir_x + game->player.plane_x * ray->camera_x;
-	ray->dir_y = game->player.dir_y + game->player.plane_y * ray->camera_x;
-	ray->map_x = (int)(game->player.x / TILE);
-	ray->map_y = (int)(game->player.y / TILE);
-	if (fabs(ray->dir_x) < 1e-10)
-		ray->delta_dist_x = 1e30;
-	else
-		ray->delta_dist_x = fabs(1 / ray->dir_x);
-	if (fabs(ray->dir_y) < 1e-10)
-		ray->delta_dist_y = 1e30;
-	else
-		ray->delta_dist_y = fabs(1 / ray->dir_y);
-	ray->hit = 0;
-}
-
-static void	calculate_step_and_side_dist(t_ray *ray, t_game *game)
-{
-	double	player_pos_x;
-	double	player_pos_y;
-
-	player_pos_x = game->player.x / TILE;
-	player_pos_y = game->player.y / TILE;
-	if (ray->dir_x < 0)
-	{
-		ray->step_x = -1;
-		ray->side_dist_x = (player_pos_x - ray->map_x) * ray->delta_dist_x;
-	}
-	else
-	{
-		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - player_pos_x) * ray->delta_dist_x;
-	}
-	if (ray->dir_y < 0)
-	{
-		ray->step_y = -1;
-		ray->side_dist_y = (player_pos_y - ray->map_y) * ray->delta_dist_y;
-	}
-	else
-	{
-		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - player_pos_y) * ray->delta_dist_y;
-	}
-}
-
-static void	perform_dda(t_ray *ray, t_game *game)
-{
-	while (ray->hit == 0)
-	{
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += ray->delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += ray->delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (ray->map_x < 0 || ray->map_x >= game->cub->map.width
-			|| ray->map_y < 0 || ray->map_y >= game->cub->map.height
-			|| game->cub->map.grid[ray->map_y][ray->map_x] == '1')
-			ray->hit = 1;
-	}
-	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - game->player.x / TILE
-				+ (1 - ray->step_x) / 2) / ray->dir_x;
-	else
-		ray->perp_wall_dist = (ray->map_y - game->player.y / TILE
-				+ (1 - ray->step_y) / 2) / ray->dir_y;
-}
-
 static void	draw_ray_on_minimap(t_game *game, t_ray *ray)
 {
-	double	ray_end_x;
-	double	ray_end_y;
 	double	scale;
 	int		start_x;
 	int		start_y;
@@ -101,91 +23,65 @@ static void	draw_ray_on_minimap(t_game *game, t_ray *ray)
 	scale = (double)MINIMAP_WIDTH / (game->cub->map.width * TILE);
 	if ((game->cub->map.height * TILE * scale) > WINDOW_HEIGHT)
 		scale = (double)WINDOW_HEIGHT / (game->cub->map.height * TILE);
-	ray_end_x = game->player.x + ray->dir_x * ray->perp_wall_dist * TILE;
-	ray_end_y = game->player.y + ray->dir_y * ray->perp_wall_dist * TILE;
 	start_x = (int)(game->player.x * scale);
 	start_y = (int)(game->player.y * scale);
-	end_x = (int)(ray_end_x * scale);
-	end_y = (int)(ray_end_y * scale);
+	end_x = (int)((game->player.x + ray->dir_x
+				* ray->perp_wall_dist * TILE) * scale);
+	end_y = (int)((game->player.y + ray->dir_y
+				* ray->perp_wall_dist * TILE) * scale);
 	if (start_x >= 0 && start_x < MINIMAP_WIDTH
 		&& start_y >= 0 && start_y < WINDOW_HEIGHT
 		&& end_x >= 0 && end_x < MINIMAP_WIDTH
 		&& end_y >= 0 && end_y < WINDOW_HEIGHT)
 	{
-		draw_line(&game->map_img, (t_line){start_x, start_y, end_x, end_y, 0xFFFF00});
+		draw_line(&game->map_img, (t_line){start_x,
+			start_y, end_x, end_y, 0xFFFF00});
 	}
 }
 
-static t_texture	*select_texture(t_game *game, t_ray *ray)
+static t_wall_draw	init_wall_draw(t_game *game, t_ray *ray)
 {
-	if (ray->side == 0)
-	{
-		if (ray->step_x > 0)
-			return (&game->cub->tex_east);
-		else
-			return (&game->cub->tex_west);
-	}
-	else
-	{
-		if (ray->step_y > 0)
-			return (&game->cub->tex_south);
-		else
-			return (&game->cub->tex_north);
-	}
-}
-
-static int	get_texture_color(t_texture *tex, int tex_x, int tex_y)
-{
-	char	*dst;
-	int		color;
-
-	if (tex_x < 0 || tex_x >= tex->width || tex_y < 0 || tex_y >= tex->height)
-		return (0xFF00FF);
-	dst = tex->addr + (tex_y * tex->line_len + tex_x * (tex->bpp / 8));
-	color = *(unsigned int *)dst;
-	return (color);
-}
-
-static void	draw_wall_stripe(t_game *game, t_ray *ray, int x)
-{
-	int			line_height;
-	int			draw_start;
-	int			draw_end;
-	int			y;
+	t_wall_draw	w;
 	double		wall_x;
-	int			tex_x;
-	double		step;
-	double		tex_pos;
-	int			tex_y;
-	int			color;
-	t_texture	*tex;
 
 	if (ray->side == 0)
 		wall_x = game->player.y / TILE + ray->perp_wall_dist * ray->dir_y;
 	else
 		wall_x = game->player.x / TILE + ray->perp_wall_dist * ray->dir_x;
 	wall_x -= floor(wall_x);
-	tex = select_texture(game, ray);
-	tex_x = (int)(wall_x * (double)tex->width);
-	if ((ray->side == 0 && ray->dir_x > 0) || (ray->side == 1 && ray->dir_y < 0))
-		tex_x = tex->width - tex_x - 1;
-	line_height = (int)(WINDOW_HEIGHT / ray->perp_wall_dist);
-	draw_start = -line_height / 2 + WINDOW_HEIGHT / 2;
-	draw_end = line_height / 2 + WINDOW_HEIGHT / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	if (draw_end >= WINDOW_HEIGHT)
-		draw_end = WINDOW_HEIGHT - 1;
-	step = 1.0 * tex->height / line_height;
-	tex_pos = (draw_start - WINDOW_HEIGHT / 2 + line_height / 2) * step;
+	w.tex = select_texture(game, ray);
+	w.tex_x = (int)(wall_x * (double)w.tex->width);
+	if ((ray->side == 0 && ray->dir_x > 0)
+		|| (ray->side == 1 && ray->dir_y < 0))
+		w.tex_x = w.tex->width - w.tex_x - 1;
+	w.line_height = (int)(WINDOW_HEIGHT / ray->perp_wall_dist);
+	w.draw_start = -w.line_height / 2 + WINDOW_HEIGHT / 2;
+	w.draw_end = w.line_height / 2 + WINDOW_HEIGHT / 2;
+	if (w.draw_start < 0)
+		w.draw_start = 0;
+	if (w.draw_end >= WINDOW_HEIGHT)
+		w.draw_end = WINDOW_HEIGHT - 1;
+	w.step = 1.0 * w.tex->height / w.line_height;
+	w.tex_pos = (w.draw_start - WINDOW_HEIGHT / 2 + w.line_height / 2) * w.step;
+	return (w);
+}
+
+static void	draw_wall_stripe(t_game *game, t_ray *ray, int x)
+{
+	t_wall_draw	w;
+	int			y;
+	int			tex_y;
+	int			color;
+
+	w = init_wall_draw(game, ray);
 	y = 0;
-	while (y < draw_start)
+	while (y < w.draw_start)
 		my_mlx_pixel_put(&game->map_img, x, y++, game->cub->ceiling.hex);
-	while (y <= draw_end)
+	while (y <= w.draw_end)
 	{
-		tex_y = (int)tex_pos & (tex->height - 1);
-		tex_pos += step;
-		color = get_texture_color(tex, tex_x, tex_y);
+		tex_y = (int)w.tex_pos & (w.tex->height - 1);
+		w.tex_pos += w.step;
+		color = get_texture_color(w.tex, w.tex_x, tex_y);
 		my_mlx_pixel_put(&game->map_img, x, y++, color);
 	}
 	while (y < WINDOW_HEIGHT)
