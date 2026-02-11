@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:23 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:05:49 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 15:32:52 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static void	draw_ray_on_minimap(t_game *game, t_ray *ray)
 		&& end_x >= 0 && end_x < MINIMAP_WIDTH
 		&& end_y >= 0 && end_y < WINDOW_HEIGHT)
 	{
-		draw_line(&game->map_img, start_x, start_y, end_x, end_y, 0xFFFF00);
+		draw_line(&game->map_img, (t_line){start_x, start_y, end_x, end_y, 0xFFFF00});
 	}
 }
 

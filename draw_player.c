@@ -6,65 +6,35 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:13 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 17:58:25 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 15:35:16 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	draw_circle(t_img *img, int cx, int cy, int r, int color)
+void	draw_circle(t_img *img, t_circle p)
 {
-	int	x;
 	int	y;
-	int	dx;
-	int	dy;
 
-	y = cy - r;
-	while (y <= cy + r)
+	y = p.cy - p.r;
+	while (y <= p.cy + p.r)
 	{
-		x = cx - r;
-		while (x <= cx + r)
-		{
-			dx = x - cx;
-			dy = y - cy;
-			if (dx * dx + dy * dy <= r * r)
-				my_mlx_pixel_put(img, x, y, color);
-			x++;
-		}
+		draw_circle_line(img, p, y);
 		y++;
 	}
 }
 
-void	draw_line(t_img *img, int x1, int y1, int x2, int y2, int color)
+void	draw_line(t_img *img, t_line p)
 {
-	int	dx;
-	int	dy;
-	int	sx;
-	int	sy;
-	int	err;
-	int	e2;
+	t_bresenham	b;
 
-	dx = abs(x2 - x1);
-	dy = abs(y2 - y1);
-	sx = (x1 < x2) ? 1 : -1;
-	sy = (y1 < y2) ? 1 : -1;
-	err = dx - dy;
+	init_bresenham(&b, p);
 	while (1)
 	{
-		my_mlx_pixel_put(img, x1, y1, color);
-		if (x1 == x2 && y1 == y2)
+		my_mlx_pixel_put(img, p.x1, p.y1, p.color);
+		if (p.x1 == p.x2 && p.y1 == p.y2)
 			break ;
-		e2 = 2 * err;
-		if (e2 > -dy)
-		{
-			err -= dy;
-			x1 += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			y1 += sy;
-		}
+		update_line_pos(&p, &b);
 	}
 }
 
@@ -81,12 +51,14 @@ void	draw_player_2d(t_game *game)
 		scale = (double)WINDOW_HEIGHT / (game->cub->map.height * TILE);
 	player_x = (int)(game->player.x * scale);
 	player_y = (int)(game->player.y * scale);
-	if (player_x >= 0 && player_x < MINIMAP_WIDTH && 
-		player_y >= 0 && player_y < WINDOW_HEIGHT)
+	if (player_x >= 0 && player_x < MINIMAP_WIDTH
+		&& player_y >= 0 && player_y < WINDOW_HEIGHT)
 	{
-		draw_circle(&game->map_img, player_x, player_y, 4, 0x00FF0000);
+		draw_circle(&game->map_img, (t_circle){player_x, player_y,
+			4, 0x00FF0000});
 		end_x = (int)(player_x + cos(game->player.angle) * 15);
 		end_y = (int)(player_y + sin(game->player.angle) * 15);
-		draw_line(&game->map_img, player_x, player_y, end_x, end_y, 0x00FFFF00);
+		draw_line(&game->map_img, (t_line){player_x, player_y, end_x,
+			end_y, 0x00FFFF00});
 	}
 }

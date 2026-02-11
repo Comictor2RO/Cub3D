@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/10 17:10:13 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/02/11 15:41:59 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,16 +122,45 @@ typedef struct s_game
 	int			mouse_y;
 }	t_game;
 
+typedef struct s_circle
+{
+	int	cx;
+	int	cy;
+	int	r;
+	int	color;
+}	t_circle;
+
+typedef struct s_line
+{
+	int	x1;
+	int	y1;
+	int	x2;
+	int	y2;
+	int	color;
+}	t_line;
+
+typedef struct s_bresenham
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+}	t_bresenham;
+
 /* Drawing functions */
 void	draw_map(t_game *game);
 int		check_collision(t_game *game, double x, double y);
-void	draw_circle(t_img *img, int cx, int cy, int r, int color);
-void	draw_line(t_img	*img, int x1, int y1, int x2, int y2, int color);
+void	draw_circle(t_img *img, t_circle params);
+void	draw_line(t_img *img, t_line params);
 void	draw_player_2d(t_game *game);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_3d_view(t_game *game);
 void	draw_rays_on_minimap(t_game *game);
 void	fill_tile(t_game *game, int x, int y, double s);
+void	init_bresenham(t_bresenham *b, t_line p);
+void	update_line_pos(t_line *p, t_bresenham *b);
+void	draw_circle_line(t_img *img, t_circle p, int y);
 
 /* Input handlers */
 int		handle_key(int keycode, t_game *game);
@@ -155,6 +184,10 @@ int		validate_map(t_map *map);
 int		load_all_textures(t_game *game);
 void	init_player_from_map(t_game *game);
 int		is_map_line(char *line);
+int	process_line(t_cub *cub, char *line, int *map_started);
+char	*read_line(int fd);
+int	check_all_elements(t_cub *cub);
+t_cub	*init_cub(void);
 
 /* Parsing utils */
 char	*ft_strtrim_whitespace(char *str);
