@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:57 by vturlas           #+#    #+#             */
-/*   Updated: 2026/01/22 16:51:37 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/03/17 16:26:38 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	check_collision(t_game *game, double x, double y)
 	if (map_x < 0 || map_x >= game->cub->map.width
 		|| map_y < 0 || map_y >= game->cub->map.height)
 		return (1);
-	if (game->cub->map.grid[map_y][map_x] == '1')
+	if (game->cub->map.grid[map_y][map_x] == '1'
+		|| game->cub->map.grid[map_y][map_x] == ' ')
 		return (1);
 	return (0);
 }
