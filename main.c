@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:19 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:09:33 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/03/18 15:29:18 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	update_game(t_game *game)
 
 	new_x = 0;
 	new_y = 0;
+	rotate_with_arrows(game);
 	movements_up_down(game, new_x, new_y);
 	movements_left_right(game, new_x, new_y);
 	y = 0;
@@ -69,6 +70,8 @@ static void	init_game_hooks(t_game game)
 	game.keys[1] = 0;
 	game.keys[2] = 0;
 	game.keys[3] = 0;
+	game.keys[4] = 0;
+	game.keys[5] = 0;
 	game.mouse_x = WINDOW_WIDTH / 2;
 	game.mouse_y = WINDOW_HEIGHT / 2;
 	mlx_mouse_hide(game.mlx, game.window);

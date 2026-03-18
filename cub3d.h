@@ -6,7 +6,7 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:37:56 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/11 16:16:22 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/03/18 15:30:33 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct s_game
 	t_player	player;
 	t_img		map_img;
 	t_cub		*cub;
-	int			keys[4];
+	int			keys[6];
 	int			mouse_x;
 	int			mouse_y;
 }	t_game;
@@ -181,6 +181,8 @@ int			handle_key(int keycode, t_game *game);
 int			handle_key_release(int keycode, t_game *game);
 int			handle_mouse_move(int x, int y, t_game *game);
 int			close_game(t_game *game);
+void		rotate_player(t_game *game, double rot_amount);
+void		rotate_with_arrows(t_game *game);
 
 /* Movements */
 void		movements_up_down(t_game *game, double new_x, double new_y);

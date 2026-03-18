@@ -6,19 +6,11 @@
 /*   By: vturlas <vturlas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 16:25:16 by vturlas           #+#    #+#             */
-/*   Updated: 2026/02/07 18:16:06 by vturlas          ###   ########.fr       */
+/*   Updated: 2026/03/18 15:31:29 by vturlas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static void	update_player_vectors(t_game *game)
-{
-	game->player.dir_x = cos(game->player.angle);
-	game->player.dir_y = sin(game->player.angle);
-	game->player.plane_x = -sin(game->player.angle) * 0.66;
-	game->player.plane_y = cos(game->player.angle) * 0.66;
-}
 
 int	handle_mouse_move(int x, int y, t_game *game)
 {
@@ -32,8 +24,7 @@ int	handle_mouse_move(int x, int y, t_game *game)
 	if (delta_x != 0)
 	{
 		rot_amount = delta_x * 0.002;
-		game->player.angle += rot_amount;
-		update_player_vectors(game);
+		rotate_player(game, rot_amount);
 	}
 	if (x < 100 || x > WINDOW_WIDTH - 100)
 	{
@@ -58,6 +49,10 @@ int	handle_key(int keycode, t_game *game)
 		game->keys[2] = 1;
 	if (keycode == 100 || keycode == 'd')
 		game->keys[3] = 1;
+	if (keycode == 65361)
+		game->keys[4] = 1;
+	if (keycode == 65363)
+		game->keys[5] = 1;
 	return (0);
 }
 
@@ -71,6 +66,10 @@ int	handle_key_release(int keycode, t_game *game)
 		game->keys[2] = 0;
 	if (keycode == 100 || keycode == 'd')
 		game->keys[3] = 0;
+	if (keycode == 65361)
+		game->keys[4] = 0;
+	if (keycode == 65363)
+		game->keys[5] = 0;
 	return (0);
 }
 
